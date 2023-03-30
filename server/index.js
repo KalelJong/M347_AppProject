@@ -12,7 +12,8 @@ const io = new Server(server, {
       "http://localhost:3000",
       "http://10.3.0.116:3000",
       "http://10.243.4.191:3000",
-      "http://10.62.106.20:3000"
+      "http://10.62.106.20:3000",
+      "http://10.2.32.16:3000"
     ],
     methods: ["GET", "POST"],
   },

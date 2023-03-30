@@ -6,7 +6,7 @@ import "./App.css";
 import io, { Socket } from "socket.io-client";
 import Chat from "./components/Chat";
 
-const socket = io("http://10.62.106.20:3001");
+const socket = io("http://10.2.32.16:3001");
 function App() {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");

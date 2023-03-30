@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700");
 .App {
   width: 100vw;
   height: 100vh;
@@ -11,7 +12,6 @@ body {
   margin: 0%;
   padding: 0%;
 }
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700");
 
 .joinChatContainer {
   display: flex;
@@ -78,7 +78,7 @@ body {
   height: calc(450px - (45px + 70px));
   border: 1px solid #263238;
   background: #fff;
-
+  overflow-y: scroll;
   position: relative;
 }
 .chat-window .chat-body .message-container {

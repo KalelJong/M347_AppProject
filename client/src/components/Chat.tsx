@@ -2,7 +2,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Socket } from "socket.io-client";
 import { FunctionComponent, useEffect, useState } from "react";
 import { messageData } from "../types/types";
-
+import ScrollToBottom from "react-scroll-to-bottom";
 interface ChatProps {
   username: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
@@ -26,6 +26,8 @@ const Chat = ({ username, socket, room }: ChatProps) => {
       };
       await socket.emit("send_message", messageData);
       setMessageList((list) => [...list, messageData]);
+      const input : HTMLInputElement = document.querySelector(".chat-footer input")!;
+      input.value = "";
     }
   };
 
@@ -41,24 +43,26 @@ const Chat = ({ username, socket, room }: ChatProps) => {
         <p>{room} | Live Chat</p>
       </div>
       <div className="chat-body">
-        {messageList.map((messageContent) => {
-          return (
-            <div
-              className="message"
-              id={`${messageContent.author === username ? "you" : "other"}`}
-            >
-              <div>
-                <div className="message-content">
-                  <p>{messageContent.message}</p>
-                </div>
-                <div className="message-meta">
-                  <p id="time">{messageContent.time}</p>
-                  <p id="author">{messageContent.author}</p>
+        <ScrollToBottom className="message-container">
+          {messageList.map((messageContent) => {
+            return (
+              <div
+                className="message"
+                id={`${messageContent.author === username ? "you" : "other"}`}
+              >
+                <div>
+                  <div className="message-content">
+                    <p>{messageContent.message}</p>
+                  </div>
+                  <div className="message-meta">
+                    <p id="time">{messageContent.time}</p>
+                    <p id="author">{messageContent.author}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </ScrollToBottom>
       </div>
       <div className="chat-footer">
         <input
@@ -67,8 +71,9 @@ const Chat = ({ username, socket, room }: ChatProps) => {
           onChange={(e) => {
             setCurrentMessage(e.target.value);
           }}
+          onKeyDown={(e) => {e.key === "Enter" && sendMessage()}}
         />
-        <button onClick={sendMessage}>&#9658;</button>
+        <button onClick={ sendMessage}>&#9658;</button>
       </div>
     </div>
   );

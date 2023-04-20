@@ -14,7 +14,7 @@ RUN yarn install
 COPY . .
 
 # Expose a port
-EXPOSE 3001
+EXPOSE 3000
 
 # Executables
 CMD [ "yarn", "start" ]

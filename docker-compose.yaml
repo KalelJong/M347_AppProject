@@ -1,19 +1,38 @@
-version: '3.4'
+version: "3.4"
+name: chat-app
 services:
+  chat-db:
+    container_name: chat-db
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: Password1!
+      MYSQL_DATABASE: ChatDB
+    volumes:
+      - "./db/db.sql:/docker-entrypoint-initdb.d/1.sql"
   chat-server:
     build: ./server
-    container_name:  chat-server
+    container_name: chat-server
     ports:
-      - "3001:3001"
+      - "3000:3000"
     volumes:
       - ./server:/app
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      DB_HOST: chat-db
+      DB_USER: root
+      DB_PASSWORD: Password1
+      DB_NAME: chat
+      CHOKIDAR_USEPOLLING: true
   chat-client:
     build: ./client
-    container_name:  chat-client
+    container_name: chat-client
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
       - ./client:/app
       - /app/node_modules

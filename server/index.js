@@ -1,19 +1,25 @@
-import pool from "./db.js";
-import mariadb from "mariadb";
-
 const express = require("express");
-const app = express();
-const http = require("http");
-const cors = require("cors");
-const { Server } = require("socket.io");
-app.use(cors());
+const bodyParser = require("body-parser");
+const mysql = require("mysql");
 
-const pool = mariadb.createPool({
-  host: "chat-db",
-  user: "root",
-  password: "Password1",
-  database: "ChatDB",
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
+
+db.connect((err) => {
+  if (err) throw err;
+  console.log("Connected to database");
+});
+
+const app = express();
+const port = 3000;
+const apiRouter = express.Router();
+
+app.use(bodyParser.json());
+app.use("/api", apiRouter);
 
 app.get("/chat/:name", async (req, res) => {
   let conn;
@@ -56,3 +62,7 @@ app.get("/chat/:name", async (req, res) => {
 // server.listen(3001, () => {
 //   console.log("SERVER RUNNING");
 // });
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});

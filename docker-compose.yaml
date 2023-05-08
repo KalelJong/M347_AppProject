@@ -3,16 +3,14 @@ name: chat-app
 services:
   chat-db:
     container_name: chat-db
-    image: mysql:8.0
-    ports:
-      - "3307:3306"
+    image: mariadb:latest
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_PID: Express
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: Password1!
-      MYSQL_DATABASE: ChatDB
+      MARIADB_ROOT_USER: root
+      MARIADB_ROOT_PASSWORD: 1234
+      MARIADB_DATABASE: ChatDB
+    ports:
+      - "3306:3306"
     volumes:
       - "./db/db.sql:/docker-entrypoint-initdb.d/1.sql"
   chat-server:
@@ -20,19 +18,23 @@ services:
     container_name: chat-server
     ports:
       - "3000:3000"
+    depends_on:
+      - chat-db
     volumes:
       - ./server:/app
     environment:
       DB_HOST: chat-db
       DB_USER: root
-      DB_PASSWORD: Password1
-      DB_NAME: chat
+      DB_PASSWORD: 1234
+      DB_NAME: ChatDB
       CHOKIDAR_USEPOLLING: true
   chat-client:
     build: ./client
     container_name: chat-client
     ports:
       - "3001:3001"
+    depends_on:
+      - chat-server
     volumes:
       - ./client:/app
       - /app/node_modules

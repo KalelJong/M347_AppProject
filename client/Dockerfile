@@ -2,7 +2,7 @@
 FROM node:lts
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /client
 
 # Copy the package.json
 COPY package.json .
